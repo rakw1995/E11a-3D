@@ -4,16 +4,11 @@ var gravity = Vector3.DOWN * 12
 var speed = 4
 var jump_speed = 6
 var spin = 0.1
-var velocity = Vector3()
+
+var velocity = Vector3(0,0,0)
 var jump = false
 
-func _physics_process(delta):
-	velocity += gravity * delta
-	get_input()
-	velocity = move_and_slide (velocity, Vector3.UP)
-	if jump and is_on_floor():
-	 velocity.y = jump_speed
-	
+
 func get_input():
 	var vy = velocity.y
 	velocity = Vector3()
@@ -26,9 +21,16 @@ func get_input():
 	if Input.is_action_pressed("strafe_right"):
 	 velocity += transform.basis.x * speed
 	 velocity.y = vy
-	jump = false
+	 jump = false
 	if Input.is_action_just_pressed("jump"):
 	 jump = true
+	
+func _physics_process(delta):
+	velocity += gravity * delta
+	get_input()
+	velocity = move_and_slide(velocity, Vector3.UP)
+	if jump and is_on_floor():
+		velocity.y = jump_speed
 	
 
 func _unhandled_input(event):
